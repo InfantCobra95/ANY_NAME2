@@ -3,6 +3,7 @@ provider "azurerm" {
   features {}
 }
 
+# This creates a resource group
 resource "azurerm_resource_group" "main" {
   name     = var.resource_group
   location = var.location
@@ -84,10 +85,10 @@ resource "azurerm_app_service" "main" {
     linux_fx_version = "JAVA|8-jre8"
   }
 
+  # Application specific environment variables
   app_settings = {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
 
-    # These are app specific environment variables
     "SPRING_PROFILES_ACTIVE"     = "mysql"
     "SPRING_DATASOURCE_URL"      = "jdbc:mysql://${azurerm_mysql_server.main.fqdn}:3306/${azurerm_mysql_database.main.name}?useUnicode=true&characterEncoding=utf8&useSSL=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
     "SPRING_DATASOURCE_USERNAME" = "${azurerm_mysql_server.main.administrator_login}@${azurerm_mysql_server.main.name}"
